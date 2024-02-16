@@ -1,61 +1,51 @@
-using Printf, UnPack
+using Printf, Statistics, LinearAlgebra, UnPack
 using GLMakie
 Makie.inline!(true)
 
 const s2yr = 31557600
 
 struct Grid
-    lx::Float64  # Length in x-direction
-    ly::Float64  # Length in y-direction
-    dx::Float64  # Grid spacing in x-direction
-    dy::Float64  # Grid spacing in y-direction
-    xc::Vector{Float64}  # x-coordinates of grid cell centers
-    yc::Vector{Float64}  # y-coordinates of grid cell centers
-    Xc::Matrix{Float64}  # Matrix of x-coordinates for grid centers
-    Yc::Matrix{Float64}  # Matrix of y-coordinates for grid centers
+    lx
+    ly
+    dx
+    dy
+    xc
+    yc
+    Xc
+    Yc
 end
 
-function Grid(lx::Float64, ly::Float64, nx::Int, ny::Int)
-    @assert lx > 0 && ly > 0 "Grid dimensions must be positive"
-    @assert nx > 0 && ny > 0 "Number of grid cells must be positive"
-
+function Grid(lx, ly, nx, ny)
     dx, dy = lx / nx, ly / ny
     xc = LinRange(-lx / 2 + dx / 2, lx / 2 - dx / 2, nx)
     yc = LinRange(-ly / 2 + dy / 2, ly / 2 - dy / 2, ny)
     Xc, Yc = [x for x = xc, _ = yc], [y for _ = xc, y = yc]
-
-    Grid(lx, ly, dx, dy, xc, yc, Xc, Yc)
+    return Grid(lx, ly, dx, dy, xc, yc, Xc, Yc)
 end
 
-struct Data{T <: Real, G}
-    B0::T   # mean height
-    β::T    # mass-balance slope
-    c::T    # mass-balance limiter
-    B::G    # Bedrock elevation
-    ELA::G  # Equilibrium line altitude
-    function Data(B0::T, β::T, c::T, grid) where {T}
-        B = bedrock_elevation(B0, grid)       # Assuming this returns type G
-        ELA = equilibrium_line_altitude(grid) # Assuming this returns type G
-        new{T, typeof(B)}(B0, β, c, B, ELA)
-    end
+struct Data
+    B0
+    β
+    c
+    B
+    ELA
 end
 
-"Compute the bedrock elevation."
-@inline function bedrock_elevation(B0, grid)
+function Data(B0, β, c, grid)
+    B = bedrock_elevation(B0, grid)
+    ELA = equilibrium_line_altitude(grid)
+    return Data(B0, β, c, B, ELA)
+end
+
+function bedrock_elevation(B0, grid)
     return @. B0 * exp(-grid.Xc^2 / 1e10 - grid.Yc^2 / 1e9) +
               B0 * exp(-grid.Xc^2 / 1e9 - (grid.Yc - grid.ly / 8) * (grid.Yc - grid.ly / 8) / 1e10)
 end
 
-"Compute the equilibrium line altitude ELA."
 equilibrium_line_altitude(grid) = @. 2150 + 900 * atan(grid.Yc / grid.ly)
 
-"Compute the average of `A` in `x` and `y` dimension."
 @views av(A) = 0.25 .* (A[1:end-1, 1:end-1] .+ A[1:end-1, 2:end] .+ A[2:end, 1:end-1] .+ A[2:end, 2:end])
-
-"Compute the average of `A` in `x` dimension."
 @views avx(A) = 0.5 .* (A[1:end-1, :] .+ A[2:end, :])
-
-"Compute the average of `A` in `y` dimension."
 @views avy(A) = 0.5 .* (A[:, 1:end-1] .+ A[:, 2:end])
 
 "Compute the effective nonlinear diffusion coefficient `D` for SIA model."
