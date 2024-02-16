@@ -1,8 +1,10 @@
-using Printf, Statistics, LinearAlgebra, UnPack
+using Printf, UnPack
 using GLMakie
 Makie.inline!(true)
 
-const s2yr = 31557600
+# constants
+const s2yr = 31557600     # seconds to years
+const ρg   = 910.0 * 9.81 # ice density x gravity
 
 struct Grid
     lx
@@ -15,7 +17,8 @@ struct Grid
     Yc
 end
 
-function Grid(lx, ly, nx, ny)
+function Grid(nx, ny)
+    lx, ly = 250000.0, 200000.0  # domain size [m]
     dx, dy = lx / nx, ly / ny
     xc = LinRange(-lx / 2 + dx / 2, lx / 2 - dx / 2, nx)
     yc = LinRange(-ly / 2 + dy / 2, ly / 2 - dy / 2, ny)
@@ -24,17 +27,19 @@ function Grid(lx, ly, nx, ny)
 end
 
 struct Data
-    B0
     β
     c
+    a1
+    a2
     B
     ELA
 end
 
-function Data(B0, β, c, grid)
-    B = bedrock_elevation(B0, grid)
+function Data(β, c, a1, a2, grid)
+    B0  = 3500.0
+    B   = bedrock_elevation(B0, grid)
     ELA = equilibrium_line_altitude(grid)
-    return Data(B0, β, c, B, ELA)
+    return Data(β, c, a1, a2, B, ELA)
 end
 
 function bedrock_elevation(B0, grid)
@@ -72,14 +77,10 @@ end
     return display(fig)
 end
 
-@views function solver(data, grid, params...)
-    @unpack B0, β, c, B, ELA = data
+@views function solver(data, grid, nt, dt, nout, ϵ)
+    @unpack β, c, a1, a2, B, ELA = data
     dx, dy = grid.dx, grid.dy
-    nt, nout, ϵ, dt, ρg = params
     nx, ny = size(B)
-    # preprocess
-    a1 = 1.9e-24 * ρg^3 * s2yr
-    a2 = 5.7e-20 * ρg^3 * s2yr
     # initialise
     S      = zeros(nx  , ny  )
     dSdx   = zeros(nx-1, ny  )
@@ -112,22 +113,20 @@ end
 
 function main()
     # physics
-    lx, ly = 250000.0, 200000.0  # domain size [m]
-    B0     = 3500.0              # mean height [m]
-    β      = 0.01                # mass-balance slope
-    c      = 2.0                 # mass-balance limiter
-    ρg     = 910.0 * 9.81        # ice density x gravity
-    dt     = 0.1                 # time step [yr]
+    β      = 0.01                  # mass-balance slope
+    c      = 2.0                   # mass-balance limiter
+    a1     = 1.9e-24 * ρg^3 * s2yr # ice flow parameter
+    a2     = 5.7e-20 * ρg^3 * s2yr # ice flow parameter
     # numerics
     resol  = 256
     nt     = 1e4                 # number of time steps
+    dt     = 0.1                 # time step [yr]
     nout   = 1e3                 # visu and error checking interval
     ϵ      = 1e-4                # steady state tolerance
-    grid   = Grid(lx, ly, resol, resol)
-    data   = Data(B0, β, c, grid)
-    params = (nt, nout, ϵ, dt, ρg)
+    grid   = Grid(resol, resol)
+    data   = Data(β, c, a1, a2, grid)
     # run and visualise the results
-    visualise(solver(data, grid, params...)...)
+    visualise(solver(data, grid, nt, dt, nout, ϵ)...)
     return
 end
 

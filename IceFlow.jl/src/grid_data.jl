@@ -16,13 +16,11 @@ Represents a two-dimensional grid with uniform spacing in both x and y direction
 The grid is constructed such that the coordinates represent the centers of grid cells.
 
 # Constructor
-    Grid(lx::Float64, ly::Float64, nx::Int, ny::Int)
+    Grid(nx::Int, ny::Int)
 
 Creates a `Grid` object with specified dimensions and number of cells.
 
 # Arguments
-- `lx::Float64`: Total length in the x-direction.
-- `ly::Float64`: Total length in the y-direction.
 - `nx::Int`: Number of grid cells along the x-direction.
 - `ny::Int`: Number of grid cells along the y-direction.
 """
@@ -37,14 +35,13 @@ struct Grid
     Yc::Matrix{Float64}  # Matrix of y-coordinates for grid centers
 end
 
-function Grid(lx::Float64, ly::Float64, nx::Int, ny::Int)
-    @assert lx > 0 && ly > 0 "Grid dimensions must be positive"
+function Grid(nx::Int, ny::Int)
     @assert nx > 0 && ny > 0 "Number of grid cells must be positive"
 
+    lx, ly = 250000.0, 200000.0  # domain size [m]
     dx, dy = lx / nx, ly / ny
     xc = LinRange(-lx / 2 + dx / 2, lx / 2 - dx / 2, nx)
     yc = LinRange(-ly / 2 + dy / 2, ly / 2 - dy / 2, ny)
     Xc, Yc = [x for x = xc, _ = yc], [y for _ = xc, y = yc]
-
     Grid(lx, ly, dx, dy, xc, yc, Xc, Yc)
 end

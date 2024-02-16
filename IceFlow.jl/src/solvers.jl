@@ -12,19 +12,17 @@ Compute the effective nonlinear diffusion coefficient `D` for SIA model.
 end
 
 """
-    solver(data::Data, grid::Grid, params...) -> Tuple
+    solver(data::Data, grid::Grid, nt, dt, nout, ϵ) -> Tuple
 
 Simulate ice flow dynamics over a given grid using specified parameters.
 
 # Arguments
 - `data::Data`: A `Data` object containing the parameters `B0`, `β`, `c`, `B`, and `ELA`.
 - `grid::Grid`: A `Grid` object defining the spatial domain and grid properties.
-- `params...`: A variable number of additional parameters, typically including:
-  - `nt`: The number of time steps for the simulation.
-  - `nout`: Output frequency for logging and error checking.
-  - `ϵ`: Convergence criterion for the iterative process.
-  - `dt`: Time step size.
-  - `ρg`: Density times gravity constant.
+- `nt`: The number of time steps for the simulation.
+- `dt`: Time step size.
+- `nout`: Output frequency for logging and error checking.
+- `ϵ`: Convergence criterion for the iterative process.
 
 # Returns
 A tuple containing:
@@ -33,14 +31,10 @@ A tuple containing:
 - `B`: Bedrock elevation.
 - `grid`: The `Grid` object.
 """
-@views function solver(data, grid, params...)
-    @unpack B0, β, c, B, ELA = data
+@views function solver(data, grid, nt, dt, nout, ϵ)
+    @unpack β, c, a1, a2, B, ELA = data
     dx, dy = grid.dx, grid.dy
-    nt, nout, ϵ, dt, ρg = params
     nx, ny = size(B)
-    # preprocess
-    a1 = 1.9e-24 * ρg^3 * s2yr
-    a2 = 5.7e-20 * ρg^3 * s2yr
     # initialise
     S      = zeros(nx  , ny  )
     dSdx   = zeros(nx-1, ny  )

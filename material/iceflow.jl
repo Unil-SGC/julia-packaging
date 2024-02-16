@@ -2,7 +2,9 @@ using Printf, UnPack
 using GLMakie
 Makie.inline!(true)
 
-const s2yr = 31557600
+# constants
+const s2yr = 31557600     # seconds to years
+const ρg   = 910.0 * 9.81 # ice density x gravity
 
 struct Grid
     lx::Float64  # Length in x-direction
@@ -15,28 +17,29 @@ struct Grid
     Yc::Matrix{Float64}  # Matrix of y-coordinates for grid centers
 end
 
-function Grid(lx::Float64, ly::Float64, nx::Int, ny::Int)
-    @assert lx > 0 && ly > 0 "Grid dimensions must be positive"
+function Grid(nx::Int, ny::Int)
     @assert nx > 0 && ny > 0 "Number of grid cells must be positive"
 
+    lx, ly = 250000.0, 200000.0  # domain size [m]
     dx, dy = lx / nx, ly / ny
     xc = LinRange(-lx / 2 + dx / 2, lx / 2 - dx / 2, nx)
     yc = LinRange(-ly / 2 + dy / 2, ly / 2 - dy / 2, ny)
     Xc, Yc = [x for x = xc, _ = yc], [y for _ = xc, y = yc]
-
     Grid(lx, ly, dx, dy, xc, yc, Xc, Yc)
 end
 
 struct Data{T <: Real, G}
-    B0::T   # mean height
-    β::T    # mass-balance slope
-    c::T    # mass-balance limiter
-    B::G    # Bedrock elevation
-    ELA::G  # Equilibrium line altitude
-    function Data(B0::T, β::T, c::T, grid) where {T}
-        B = bedrock_elevation(B0, grid)       # Assuming this returns type G
-        ELA = equilibrium_line_altitude(grid) # Assuming this returns type G
-        new{T, typeof(B)}(B0, β, c, B, ELA)
+    β::T         # mass-balance slope
+    c::T         # mass-balance limiter
+    a1::T        # ice flow param 1
+    a2::T        # ice flow param 2
+    B::G         # Bedrock elevation
+    ELA::G       # Equilibrium line altitude
+    function Data(β::T, c::T, a1::T, a2::T, grid) where {T}
+        B0  = 3500.0                          # mean height
+        B   = bedrock_elevation(B0, grid)     # Bedrock - Assuming this returns type G
+        ELA = equilibrium_line_altitude(grid) # ELA - Assuming this returns type G
+        new{T, typeof(B)}(β, c, a1, a2, B, ELA)
     end
 end
 
@@ -82,14 +85,10 @@ end
     return display(fig)
 end
 
-@views function solver(data, grid, params...)
-    @unpack B0, β, c, B, ELA = data
+@views function solver(data, grid, nt, dt, nout, ϵ)
+    @unpack β, c, a1, a2, B, ELA = data
     dx, dy = grid.dx, grid.dy
-    nt, nout, ϵ, dt, ρg = params
     nx, ny = size(B)
-    # preprocess
-    a1 = 1.9e-24 * ρg^3 * s2yr
-    a2 = 5.7e-20 * ρg^3 * s2yr
     # initialise
     S      = zeros(nx  , ny  )
     dSdx   = zeros(nx-1, ny  )
@@ -122,22 +121,20 @@ end
 
 function main()
     # physics
-    lx, ly = 250000.0, 200000.0  # domain size [m]
-    B0     = 3500.0              # mean height [m]
-    β      = 0.01                # mass-balance slope
-    c      = 2.0                 # mass-balance limiter
-    ρg     = 910.0 * 9.81        # ice density x gravity
-    dt     = 0.1                 # time step [yr]
+    β      = 0.01                  # mass-balance slope
+    c      = 2.0                   # mass-balance limiter
+    a1     = 1.9e-24 * ρg^3 * s2yr # ice flow parameter
+    a2     = 5.7e-20 * ρg^3 * s2yr # ice flow parameter
     # numerics
     resol  = 256
     nt     = 1e4                 # number of time steps
+    dt     = 0.1                 # time step [yr]
     nout   = 1e3                 # visu and error checking interval
     ϵ      = 1e-4                # steady state tolerance
-    grid   = Grid(lx, ly, resol, resol)
-    data   = Data(B0, β, c, grid)
-    params = (nt, nout, ϵ, dt, ρg)
+    grid   = Grid(resol, resol)
+    data   = Data(β, c, a1, a2, grid)
     # run and visualise the results
-    visualise(solver(data, grid, params...)...)
+    visualise(solver(data, grid, nt, dt, nout, ϵ)...)
     return
 end
 

@@ -21,13 +21,13 @@ using IceFlow
 
 # Define grid and data parameters
 grid = Grid(lx, ly, resol, resol)
-data = Data(B0, β, c, grid)
+data = Data(β, c, a1, a2, grid)
 
 # Define solver parameters
 params = (nt, nout, ϵ, dt, ρg)
 
 # Run a simulation
-result = solver(data, grid, params...)
+result = solver(data, grid, nt, dt, nout, ϵ)
 
 # Visualize the results
 visualise(result)
@@ -37,11 +37,14 @@ module IceFlow
 
 export Grid, Data
 export solver, visualise
+export s2yr, ρg
 
 using Printf, UnPack
 using GLMakie
 
-const s2yr = 31557600
+# constants
+const s2yr = 31557600     # seconds to years
+const ρg   = 910.0 * 9.81 # ice density x gravity
 
 include("grid_data.jl")
 include("solvers.jl")
