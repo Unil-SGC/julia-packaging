@@ -45,7 +45,7 @@ visualise(solver(data, grid, nt, dt, nout, ϵ)...)
 ```
 
 ## Documentation
-For more detailed documentation, query the help from with the REPL:
+For more detailed documentation, query the help from within the REPL:
 ```julia-repl
 julia> ?
 
