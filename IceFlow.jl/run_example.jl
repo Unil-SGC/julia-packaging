@@ -1,4 +1,6 @@
 using IceFlow
+using GLMakie
+Makie.inline!(true)
 
 # physics
 lx, ly = 250000.0, 200000.0  # domain size [m]

@@ -40,15 +40,22 @@ struct Data{T <: Real, G}
     end
 end
 
-function bedrock_elevation(B0, grid)
+"Compute the bedrock elevation."
+@inline function bedrock_elevation(B0, grid)
     return @. B0 * exp(-grid.Xc^2 / 1e10 - grid.Yc^2 / 1e9) +
               B0 * exp(-grid.Xc^2 / 1e9 - (grid.Yc - grid.ly / 8) * (grid.Yc - grid.ly / 8) / 1e10)
 end
 
+"Compute the equilibrium line altitude ELA."
 equilibrium_line_altitude(grid) = @. 2150 + 900 * atan(grid.Yc / grid.ly)
 
+"Compute the average of `A` in `x` and `y` dimension."
 @views av(A) = 0.25 .* (A[1:end-1, 1:end-1] .+ A[1:end-1, 2:end] .+ A[2:end, 1:end-1] .+ A[2:end, 2:end])
+
+"Compute the average of `A` in `x` dimension."
 @views avx(A) = 0.5 .* (A[1:end-1, :] .+ A[2:end, :])
+
+"Compute the average of `A` in `y` dimension."
 @views avy(A) = 0.5 .* (A[:, 1:end-1] .+ A[:, 2:end])
 
 "Compute the effective nonlinear diffusion coefficient `D` for SIA model."

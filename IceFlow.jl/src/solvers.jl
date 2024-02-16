@@ -12,11 +12,26 @@ Compute the effective nonlinear diffusion coefficient `D` for SIA model.
 end
 
 """
-    solver(data, grid, params...)
+    solver(data::Data, grid::Grid, params...) -> Tuple
 
-Solve ice flow using the shallow ice approximation (SIA) for given `data`, `grid` and `params`.
+Simulate ice flow dynamics over a given grid using specified parameters.
 
-The function return `(S, H, B, grid)`.
+# Arguments
+- `data::Data`: A `Data` object containing the parameters `B0`, `β`, `c`, `B`, and `ELA`.
+- `grid::Grid`: A `Grid` object defining the spatial domain and grid properties.
+- `params...`: A variable number of additional parameters, typically including:
+  - `nt`: The number of time steps for the simulation.
+  - `nout`: Output frequency for logging and error checking.
+  - `ϵ`: Convergence criterion for the iterative process.
+  - `dt`: Time step size.
+  - `ρg`: Density times gravity constant.
+
+# Returns
+A tuple containing:
+- `S`: Surface elevation.
+- `H`: Ice thickness.
+- `B`: Bedrock elevation.
+- `grid`: The `Grid` object.
 """
 @views function solver(data, grid, params...)
     @unpack B0, β, c, B, ELA = data
