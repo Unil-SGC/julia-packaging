@@ -123,9 +123,9 @@ function main()
     dt     = 0.1                 # time step [yr]
     # numerics
     resol  = 256
-    nt     = 1e4             # number of time steps
-    nout   = 1e3             # visu and error checking interval
-    ϵ      = 1e-4            # steady state tolerance
+    nt     = 1e4                 # number of time steps
+    nout   = 1e3                 # visu and error checking interval
+    ϵ      = 1e-4                # steady state tolerance
     grid   = Grid(lx, ly, resol, resol)
     data   = Data(B0, β, c, grid)
     params = (nt, nout, ϵ, dt, ρg)
