@@ -22,7 +22,7 @@ Compute the average in `y` dimension.
 """
     visualise(S, H, B, grid) -> Figure
 
-Visualize the ice flow simulation results over a specified grid.
+Visualise the ice flow simulation results over a specified grid.
 
 # Arguments
 - `S`: A matrix representing the surface elevation of the ice.
@@ -31,7 +31,7 @@ Visualize the ice flow simulation results over a specified grid.
 - `grid`: A `Grid` object containing the grid properties and coordinates.
 
 # Description
-This function creates a 2.5D visualization of the ice flow simulation results. It displays the bedrock elevation and the surface elevation where ice thickness is greater than a minimal threshold (here 0.01 meters).
+This function creates a 2.5D visualisation of the ice flow simulation results. It displays the bedrock elevation and the surface elevation where ice thickness is greater than a minimal threshold (here 0.01 meters).
 """
 @views function visualise(S, H, B, grid)
     S_v = fill(NaN, size(S))

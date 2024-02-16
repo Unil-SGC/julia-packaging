@@ -8,7 +8,7 @@ Shallow Ice Approximation (SIA) ice flow solver
 - **Grid Setup**: Define spatial grids for simulations.
 - **Data Handling**: Manage ice flow parameters and synthetic data.
 - **Simulation**: Numerically simulate ice dynamics over a grid.
-- **Visualization**: Visualise simulation results with 3D plots.
+- **Visualization**: Visualise simulation results.
 
 ## Installation
 To install `IceFlow.jl`, use the Julia package manager:
