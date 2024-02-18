@@ -1,7 +1,7 @@
 # Julia-packaging
 Material for the [packaging workshop](https://unil-sgc.github.io/events/pkg-workshop/).
 
-:bulb: The Python packaging material for the morning session can be accessed here: :warning: TODO
+:bulb: The Python packaging material for the morning session can be accessed here: [python-packaging](https://github.com/MargotSirdey/python-packaging)
 
 ## Content
 
