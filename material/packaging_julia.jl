@@ -9,7 +9,7 @@ md"""
 </br>
 
 <center><img src="assets/Julia_logo.png" width="300" style="border:0">
-        <img src="assets/Pkg_logo.png" width="300" style="border:0" \n\n></center>
+        <img src="assets/Pkg_logo.png" width="200" style="border:0" \n\n></center>
 
 <br>
 </br>
@@ -226,4 +226,41 @@ md"""
 1. Create a new GitHub repository with the exact same name of your package: `IceFlow.jl`
 2. Locally, in the root of your package directory: `git add remote add origin <address of the new repository>`
 3. Push code on remote GitHub server: `git push -u origin main`
+"""
+
+#src #########################################################################
+#nb # %% A slide [markdown] {"slideshow": {"slide_type": "slide"}}
+md"""
+## Step 6: (Advanced) register your package in the Julia Registry
+
+Upon doing so and passing the checks, IceFlow.jl could then be installed by anyone upon typing
+
+```julia-repl
+julia> ]
+
+(@v1.10) pkg> add IceFlow
+```
+
+More infos here [https://julialang.org/contribute/developing_package/#step_5_register_your_package](https://julialang.org/contribute/developing_package/#step_5_register_your_package)
+"""
+
+#src #########################################################################
+#nb # %% A slide [markdown] {"slideshow": {"slide_type": "slide"}}
+md"""
+## Any questions?
+
+<br>
+</br>
+<br>
+</br>
+
+<center><img src="assets/SGC_unilogo_bleu_300dpi.png" width="250" style="border:0"></center>
+
+<br>
+</br>
+<br>
+</br>
+
+<center>Swiss Geocomputing Centre</center>
+
 """
