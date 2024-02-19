@@ -1,5 +1,8 @@
 # Julia-packaging
-Material for the [packaging workshop](https://unil-sgc.github.io/events/pkg-workshop/).
+
+<img src="material/assets/SGC_unilogo_bleu_300dpi.png" alt="ParallelStencil.jl" width="200">  **[Packaging workshop](https://unil-sgc.github.io/events/pkg-workshop/) - Swiss Gecomputing Centre & DCSR, UNIL.**
+
+<br>
 
 :bulb: The Python packaging material for the morning session can be accessed here: [python-packaging](https://github.com/MargotSirdey/python-packaging)
 
@@ -14,7 +17,7 @@ This repository contains the [initial notebooks](material/) we will discuss thro
 
 - [IceFlow.jl](IceFlow.jl/): The Julia package we will create from the monolithic Julia script [iceflow.jl](material/iceflow.jl).
 
-The slides (generated from a Jupyter notebook) are available here: :warning: TODO
+- :book: The slides are available here: :warning: TODO
 
 # Getting started - Installing Julia and VScode
 
