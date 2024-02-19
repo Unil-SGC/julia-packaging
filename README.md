@@ -17,7 +17,7 @@ This repository contains the [initial notebooks](material/) we will discuss thro
 
 - [IceFlow.jl](IceFlow.jl/): The Julia package we will create from the monolithic Julia script [iceflow.jl](material/iceflow.jl).
 
-- :book: The slides are available here: [material/packaging_julia.ipynb](material/packaging_julia.ipynb)
+- :book: The slides are available at [material/packaging_julia.ipynb](material/packaging_julia.ipynb) and can be run as a Jupyter notebook (+ RISE plugin for slideshow).
 
 # Getting started - Installing Julia and VScode
 
