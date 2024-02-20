@@ -175,9 +175,9 @@ md"""
 #nb # %% A slide [markdown] {"slideshow": {"slide_type": "slide"}}
 md"""
 Structure:
-    - specific files for data, solver and utilities
-    - main IceFlow module
-    - export functions, include files, define package-wide `const`
+- specific files for data, solver and utilities
+- main IceFlow module
+- export functions, include files, define package-wide `const`
 """
 
 #src #########################################################################
