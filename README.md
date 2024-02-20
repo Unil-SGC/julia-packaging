@@ -19,6 +19,13 @@ This repository contains the [initial notebooks](material/) we will discuss thro
 
 - :book: The slides are available at [material/packaging_julia.ipynb](material/packaging_julia.ipynb) and can be run as a Jupyter notebook (+ RISE plugin for slideshow).
 
+### Final IceFlow.jl package
+
+The fully packaged and standalone version of IceFlow.jl can be accessed at [https://github.com/Unil-SGC/IceFlow.jl](https://github.com/Unil-SGC/IceFlow.jl) and installed in Julia as following:
+```julia-repl
+using Pkg; Pkg.add("https://github.com/Unil-SGC/IceFlow.jl")
+```
+
 # Getting started - Installing Julia and VScode
 
 This guide provides step-by-step instructions for installing Julia via Juliaup and setting up Visual Studio Code (VSCode) for Julia development.
