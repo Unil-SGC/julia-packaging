@@ -4,7 +4,7 @@
 
 <br>
 
-:bulb: The Python packaging material for the morning session can be accessed here: [python-packaging](https://github.com/MargotSirdey/python-packaging)
+:bulb: The Python packaging material for the morning session can be accessed here: [python-packaging](https://github.com/Unil-SGC/python-packaging)
 
 ## Content
 
