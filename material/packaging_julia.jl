@@ -27,7 +27,7 @@ md"""
 2. From Julia Jupyter Notebooks to Julia scripts
 
 3. From Julia script to Julia package
-    - Difference between scritps, package (with/out modules)
+    - Difference between scripts, package (with/out modules)
     - Julia project files structure
         - `.toml` files, structure
 
@@ -107,7 +107,7 @@ md"""
 md"""
 ## From Julia script to Julia package
 
-- Difference between scritps, package (with/out modules)
+- Difference between scripts, package (with/out modules)
 - Julia project files: `.toml`
 """
 

@@ -1,4 +1,6 @@
 .DS_Store
 Manifest.toml
 .vscode
+.ipynb*
+
 gitignore
