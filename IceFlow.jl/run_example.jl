@@ -1,6 +1,5 @@
 using IceFlow
-using GLMakie
-Makie.inline!(true)
+using CairoMakie
 
 # physics
 β      = 0.01                  # mass-balance slope

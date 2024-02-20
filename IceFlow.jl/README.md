@@ -22,8 +22,7 @@ The [`run_example.jl`](run_example.jl) script provides an ex example on how to r
 
 ```julia
 using IceFlow
-using GLMakie
-Makie.inline!(true)
+using CairoMakie
 
 # physics
 β      = 0.01                  # mass-balance slope

@@ -1,6 +1,5 @@
 using Printf, UnPack
-using GLMakie
-Makie.inline!(true);
+using CairoMakie
 
 # constants
 const s2yr = 31557600     # seconds to years

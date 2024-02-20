@@ -13,24 +13,30 @@ It includes functionality for defining the grid and ice flow parameters, perform
 - `visualise`: A function for visualizing simulation results.
 
 # Usage
-To use `IceFlow`, import the module and utilize its exported structs and functions to set up your simulation environment,
+To use `IceFlow`, import the module and set up your simulation environment,
 perform simulations, and visualize the results.
 
 ```julia
 using IceFlow
+using CairoMakie
 
-# Define grid and data parameters
-grid = Grid(lx, ly, resol, resol)
-data = Data(β, c, a1, a2, grid)
+# physics
+β      = 0.01                  # mass-balance slope
+c      = 2.0                   # mass-balance limiter
+a1     = 1.9e-24 * ρg^3 * s2yr # ice flow parameter
+a2     = 5.7e-20 * ρg^3 * s2yr # ice flow parameter
 
-# Define solver parameters
-params = (nt, nout, ϵ, dt, ρg)
+# numerics
+resol  = 256
+nt     = 1e4                 # number of time steps
+dt     = 0.1                 # time step [yr]
+nout   = 1e3                 # visu and error checking interval
+ϵ      = 1e-4                # steady state tolerance
+grid   = Grid(resol, resol)
+data   = Data(β, c, a1, a2, grid)
 
-# Run a simulation
-result = solver(data, grid, nt, dt, nout, ϵ)
-
-# Visualize the results
-visualise(result)
+# run and visualise the results
+visualise(solver(data, grid, nt, dt, nout, ϵ)...)
 ```
 """
 module IceFlow
@@ -40,7 +46,7 @@ export solver, visualise
 export s2yr, ρg
 
 using Printf, UnPack
-using GLMakie
+using CairoMakie
 
 # constants
 const s2yr = 31557600     # seconds to years
